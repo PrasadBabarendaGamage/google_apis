@@ -6,6 +6,8 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 import os
+import string
+
 
 def get_sheets_service(client_secret_path='./',
                        client_secret_fname='client_secret.json',
@@ -41,3 +43,23 @@ def read_sheets_values(service, spreadsheet_id, range_name):
         spreadsheetId=spreadsheet_id,
         range=range_name).execute()
     return result.get('values', [])
+
+def write_rows(sheets_service, spreadsheet_id, write_range_name, rows):
+    # Write values to target sheet
+    body = {
+        "majorDimension": "ROWS",
+        'values': rows
+    }
+    result = sheets_service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id, range=write_range_name,
+        valueInputOption='USER_ENTERED', body=body).execute()
+
+def num2ascii(n,b=string.ascii_uppercase):
+   d, m = divmod(n,len(b))
+   return num2ascii(d-1,b)+b[m] if d else b[m]
+
+def clear_sheet(service, spreadsheet_id, sheet_name):
+    rangeAll = '{0}!A1:Z'.format(sheet_name)
+    body = {}
+    resultClear = service.spreadsheets().values().clear(
+        spreadsheetId=spreadsheet_id, range=rangeAll, body=body).execute()
