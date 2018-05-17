@@ -106,3 +106,6 @@ venv.bak/
 # OAuth files
 *client_secret.json
 *credentials.json
+
+# Pycharm files
+.idea
