@@ -17,7 +17,6 @@ if __name__ == '__main__':
         credentials_path=credentials_path,
         client_secret_path=client_secret_path,
         scopes=read_scope)
-    # Call the Sheets API
     values = google_apis.read_sheets_values(
         read_sheets_service, spreadsheet_id, range_name)
     if not values:
